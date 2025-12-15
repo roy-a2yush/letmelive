@@ -158,9 +158,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 lists.pass.forEach(p => {
                     products.push({
                         name: p.name,
-                        source: p.source,
+                        source: p.source || 'Open Data',
                         category: category,
                         status: 'pass',
+                        link: p.link
+                    });
+                });
+            }
+
+            if (lists.fail) {
+                lists.fail.forEach(p => {
+                    products.push({
+                        name: p.name,
+                        source: p.source || 'Open Data',
+                        category: category,
+                        status: 'fail',
+                        link: p.link
+                    });
+                });
+            }
+
+            if (lists.expired) {
+                lists.expired.forEach(p => {
+                    products.push({
+                        name: p.name,
+                        source: p.source || 'Open Data',
+                        category: category,
+                        status: 'pending',
                         link: p.link
                     });
                 });
