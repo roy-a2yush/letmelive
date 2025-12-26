@@ -315,20 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
             path.setAttribute('fill', segment.color);
             path.setAttribute('class', 'pie-segment');
             path.setAttribute('data-status', segment.status);
-            path.style.cursor = 'pointer';
-            path.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
-            path.style.transformOrigin = '100px 100px';
-
-            // Hover effect
-            path.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.05)';
-                this.style.opacity = '0.8';
-            });
-
-            path.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-                this.style.opacity = '1';
-            });
 
             // Click to filter
             path.addEventListener('click', function() {
@@ -339,29 +325,25 @@ document.addEventListener('DOMContentLoaded', () => {
             currentAngle = endAngle;
         });
 
-        // Clear and replace chart content
-        chart.innerHTML = '';
-        chart.appendChild(svg);
+        // Remove old SVG if it exists, keeping the center element intact
+        const existingSvg = chart.querySelector('svg');
+        if (existingSvg) {
+            chart.removeChild(existingSvg);
+        }
+        chart.insertBefore(svg, chart.firstChild);
 
-        // Add center circle back
-        const centerDiv = document.createElement('div');
-        centerDiv.className = 'chart-center';
-        centerDiv.innerHTML = `
-            <span id="totalProducts">${stats.total.textContent}</span>
-            <small>Total</small>
-        `;
-
-        // Make center clickable to reset filter
-        centerDiv.style.cursor = 'pointer';
-        centerDiv.addEventListener('click', function() {
-            activeFilter = 'all';
-            searchInput.value = '';
-            filterData();
-            updateChartHighlight();
-            window.scrollTo({ top: document.getElementById('resultsGrid').offsetTop - 100, behavior: 'smooth' });
-        });
-
-        chart.appendChild(centerDiv);
+        // Add click listener to center to reset filter (if not already added)
+        const centerDiv = chart.querySelector('.chart-center');
+        if (centerDiv && !centerDiv.hasAttribute('data-click-listener')) {
+            centerDiv.addEventListener('click', function() {
+                activeFilter = 'all';
+                searchInput.value = '';
+                filterData();
+                updateChartHighlight();
+                window.scrollTo({ top: document.getElementById('resultsGrid').offsetTop - 100, behavior: 'smooth' });
+            });
+            centerDiv.setAttribute('data-click-listener', 'true');
+        }
     }
 
     // Helper function to create SVG path for donut segment

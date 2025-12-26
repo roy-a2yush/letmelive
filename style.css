@@ -305,7 +305,14 @@ h1.glitch::after {
 }
 
 .pie-segment {
+    cursor: pointer;
+    transform-origin: 100px 100px;
     transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+}
+
+.pie-segment:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
 }
 
 .chart-center {
